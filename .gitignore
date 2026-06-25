@@ -1,0 +1,9 @@
+# the harness is docs + templates; nothing proprietary lives here by design
+node_modules/
+.env
+.env.*
+.DS_Store
+*.log
+.train-runs/
+.vercel/
+.wrangler/
