@@ -1,0 +1,18 @@
+{
+  "name": "sfx-harness",
+  "owner": {
+    "name": "Jesse Jolly",
+    "email": "admin@sfxtechinnovation.com",
+    "url": "https://jessejolly.com"
+  },
+  "metadata": {
+    "description": "Jesse Jolly's agentic engineering harness for Claude Code: the control system around coding agents that ships and operates production software."
+  },
+  "plugins": [
+    {
+      "name": "agentic-harness",
+      "source": "./plugins/agentic-harness",
+      "description": "Durable context (a memory bank), one-orchestrator sub-agent discipline, verify-against-canonical-source gates, and a clean key-free MCP loadout. Installs sub-agents, skills, an MCP set, and a /harness-init scaffolder into your Claude Code. Fully customizable."
+    }
+  ]
+}

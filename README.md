@@ -14,6 +14,19 @@ Anyone can vibe-code a demo in an afternoon. The hard part is shipping something
 
 ---
 
+## Install (Claude Code plugin)
+
+The harness is an installable Claude Code plugin. Add the marketplace, install it, reload:
+
+```
+/plugin marketplace add SFX-TECH/agentic-harness
+/plugin install agentic-harness@sfx-harness
+```
+
+You get a clean, key-free MCP loadout (context7, sequential-thinking, filesystem, playwright), two sub-agents (`code-reviewer`, `block-0-auditor`), and a `/harness-init` command that scaffolds the `CLAUDE.md` bootstrap and the memory bank into your own project. Everything is overridable. Full details and customization in [`plugins/agentic-harness/README.md`](plugins/agentic-harness/README.md).
+
+---
+
 ## Why a harness
 
 A coding agent is a powerful but forgetful contractor. Point it at a real codebase with no harness and you get three failures, every time:
@@ -110,6 +123,6 @@ MIT licensed. Take what is useful, make it yours.
 
 ---
 
-Built by **Jesse Jolly** · [SFX Tech Innovation](https://sfxtechinnovation.com) · [LinkedIn](https://linkedin.com/in/jessegjolly) · jessejolly.com coming soon
+Built by **Jesse Jolly** · [SFX Tech Innovation](https://sfxtechinnovation.com) · [LinkedIn](https://linkedin.com/in/jessegjolly) · [jessejolly.com](https://jessejolly.com)
 
 *The harness is open source under MIT. The products built with it are private and proprietary. Nothing in this repo includes client data, application source, or patent-method internals.*
