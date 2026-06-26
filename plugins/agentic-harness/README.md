@@ -29,6 +29,7 @@ Claude Code's built-in WebFetch and WebSearch cover web access. GitHub and proje
 - `code-reviewer`: the verification gate. Run before any merge.
 - `block-0-auditor`: the pre-work audit. Run before writing code for a non-trivial change.
 - `memory-bank-curator`: the maintenance partner. Run at the end of a meaningful session to propose memory-bank updates.
+- `ci-watcher`: watch an open PR's CI, diagnose a failure from the real logs, and propose a fix. Uses the gh CLI, no GitHub MCP token needed.
 
 **Skills:**
 
@@ -37,6 +38,11 @@ Claude Code's built-in WebFetch and WebSearch cover web access. GitHub and proje
 - `/closure-synthesis`: at the end of a meaningful change, close the loop on the memory bank (append progress, replace active context, bank decisions, surface observations). The ritual that keeps the bank alive.
 - `/phase-gate-check`: before declaring a phase or release complete, run the exit criteria against the build, tests, and deploy. Refuses to close on red.
 - `/bank-observation`: record a reusable lesson with the second-instance promotion gate (a candidate on first sight, a numbered observation on recurrence).
+- `/house-style-guard`: mechanize a project's house-style or content rules into a guard that fails on violation, Principle #3 applied to your own copy.
+
+**Hooks:**
+
+- `SessionStart`: surfaces the project's memory-bank presence and git freshness at the start of every session, so work never begins on stale state. Read-only, never blocks.
 
 ## Use it
 
