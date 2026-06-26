@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agentic-harness",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "The operating system Jesse Jolly wraps around coding agents to ship and operate production software: durable context, one orchestrator plus sequential sub-agents, and verify-against-canonical-source gates.",
   "author": {
     "name": "Jesse Jolly",

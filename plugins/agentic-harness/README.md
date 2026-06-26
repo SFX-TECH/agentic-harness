@@ -28,17 +28,21 @@ Claude Code's built-in WebFetch and WebSearch cover web access. GitHub and proje
 
 - `code-reviewer`: the verification gate. Run before any merge.
 - `block-0-auditor`: the pre-work audit. Run before writing code for a non-trivial change.
+- `memory-bank-curator`: the maintenance partner. Run at the end of a meaningful session to propose memory-bank updates.
 
 **Skills:**
 
 - `/harness-init`: scaffold a `CLAUDE.md` bootstrap and a memory bank (decisions, active context, progress) into your current project.
 - `harness-principles`: the operational principles, available to your agent when it plans non-trivial work.
+- `/closure-synthesis`: at the end of a meaningful change, close the loop on the memory bank (append progress, replace active context, bank decisions, surface observations). The ritual that keeps the bank alive.
+- `/phase-gate-check`: before declaring a phase or release complete, run the exit criteria against the build, tests, and deploy. Refuses to close on red.
+- `/bank-observation`: record a reusable lesson with the second-instance promotion gate (a candidate on first sight, a numbered observation on recurrence).
 
 ## Use it
 
 1. In a project, run **`/harness-init`** to scaffold the harness, then fill in `CLAUDE.md` with your real stack, locked decisions, and current state.
 2. Keep the memory bank current. It is the project's durable brain across sessions.
-3. Run **`block-0-auditor`** before non-trivial work and **`code-reviewer`** before merging.
+3. Run **`block-0-auditor`** before non-trivial work and **`code-reviewer`** before merging. Close meaningful work with **`/closure-synthesis`**, and gate a phase or release with **`/phase-gate-check`**.
 4. Make it yours.
 
 ## Customize
