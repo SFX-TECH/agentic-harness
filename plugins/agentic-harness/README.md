@@ -41,6 +41,10 @@ Claude Code's built-in WebFetch and WebSearch cover web access. GitHub and proje
 - `/bank-observation`: record a reusable lesson with the second-instance promotion gate (a candidate on first sight, a numbered observation on recurrence).
 - `/house-style-guard`: mechanize a project's house-style or content rules into a guard that fails on violation, Principle #3 applied to your own copy.
 - `cross-model-review`: run a second vendor's coding model as a read-only adversarial reviewer over the staged diff, and keep re-reviewing the updated bundle until it converges or hits the tripwire. The model that wrote the code shares its own blind spots; this gate does not.
+- `no-api-spend`: a hard cost guardrail. No code the agent writes may call a paid API without stating volume, estimated cost, and getting explicit approval first. Covers scripts, subagents, batches, and packages that phone home on your key.
+- `safe-mutation-loop`: the contract for an agent that mutates real state: gate against a policy allowlist, snapshot before, execute with exit codes checked, verify with evidence, declare honest undo coverage, and classify every action into three autonomy tiers (silent / auto-revert / human-gate).
+- `local-api-hardening`: the threat-model checklist for a localhost API behind a desktop app or dev tool. Loopback is a neighborhood, not a vault: every mutation route authenticated, timing-safe comparisons, deny-by-default CORS, tokens never persisted or logged.
+- `verify-before-writing`: the anti-hallucination probe. Before writing code against a schema, route, or signature not verified this session, look at the real one (a column probe, a route probe; a 401 means alive-wants-auth, a 404 means not-there).
 
 **Hooks:**
 

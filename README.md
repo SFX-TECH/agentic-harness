@@ -27,7 +27,7 @@ The harness is an installable Claude Code plugin (an add-on you install into the
 /plugin install agentic-harness@sfx-harness
 ```
 
-You get a clean, key-free MCP loadout (context7, sequential-thinking, filesystem, playwright), two sub-agents (`code-reviewer`, `block-0-auditor`), and a `/harness-init` command that scaffolds the `CLAUDE.md` bootstrap and the memory bank into your own project. Everything is overridable. Full details and customization in [`plugins/agentic-harness/README.md`](plugins/agentic-harness/README.md).
+You get a clean, key-free MCP loadout (context7, sequential-thinking, filesystem, playwright), a fleet of sub-agents (`advisor`, `code-reviewer`, `block-0-auditor`, `memory-bank-curator`, `ci-watcher`), and a `/harness-init` command that scaffolds the `CLAUDE.md` bootstrap and the memory bank into your own project. Everything is overridable. Full details and customization in [`plugins/agentic-harness/README.md`](plugins/agentic-harness/README.md).
 
 ---
 
