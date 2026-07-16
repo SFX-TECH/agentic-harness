@@ -135,13 +135,12 @@ The harness is intentionally small and copy-paste friendly:
 3. Adopt `AUTONOMOUS_LOOP.md` when a task is bigger than one context window.
 4. Read `PRINCIPLES.md` and `PATTERNS.md`, then start banking your own. The principles that matter most are the ones you earn.
 
-## Field notes and tools
+## Field notes
 
-> **In plain terms:** The docs above are the harness as designed. Two newer parts show it as lived. `field-notes/` holds one page per real project describing how the harness behaves under that project's pressure, what broke, and which patterns were earned there (start with the SimpleFixAI notes: paired verifier sessions, cross-model review, the consolidation loop). `tools/` holds small runnable utilities born inside the harness, starting with Mission Control, a one-page live dashboard of every Claude Code session on your machine.
+> **In plain terms:** The docs above are the harness as designed. This part shows it as lived. `field-notes/` holds one page per real project describing how the harness behaves under that project's pressure, what broke, and which patterns were earned there. Patterns graduate from field notes into the shared docs and, when they are executable practices, into the plugin as skills and agents (that is where the advisor agent and the cross-model-review skill came from).
 
-- [`field-notes/`](field-notes/README.md) - production texture, one file per project. Patterns graduate from here into PRINCIPLES and PATTERNS.
-- [`field-notes/simplefixai.md`](field-notes/simplefixai.md) - the flagship: four releases in four days, the Advisor/Worker paired-session pattern, cross-model adversarial review, and the failures that taught them.
-- [`tools/mission-control/`](tools/mission-control/README.md) - see all your agent sessions working, live, in one view.
+- [`field-notes/`](field-notes/README.md) - production texture, one file per project.
+- [`field-notes/simplefixai.md`](field-notes/simplefixai.md) - the flagship: the Advisor/Worker paired-session pattern, cross-model adversarial review with the consolidation loop, and the failures that taught them.
 
 ---
 
