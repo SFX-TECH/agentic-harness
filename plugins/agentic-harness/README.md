@@ -30,6 +30,7 @@ Claude Code's built-in WebFetch and WebSearch cover web access. GitHub and proje
 - `block-0-auditor`: the pre-work audit. Run before writing code for a non-trivial change.
 - `memory-bank-curator`: the maintenance partner. Run at the end of a meaningful session to propose memory-bank updates.
 - `ci-watcher`: watch an open PR's CI, diagnose a failure from the real logs, and propose a fix. Uses the gh CLI, no GitHub MCP token needed.
+- `advisor`: the independent verifier and prompt-writer that pairs with a worker session. Never edits; verifies every load-bearing claim against ground truth (git, live artifacts, real data), then writes the next session's brief. The prompt is the output of verification, never the start of it.
 
 **Skills:**
 
@@ -39,6 +40,7 @@ Claude Code's built-in WebFetch and WebSearch cover web access. GitHub and proje
 - `/phase-gate-check`: before declaring a phase or release complete, run the exit criteria against the build, tests, and deploy. Refuses to close on red.
 - `/bank-observation`: record a reusable lesson with the second-instance promotion gate (a candidate on first sight, a numbered observation on recurrence).
 - `/house-style-guard`: mechanize a project's house-style or content rules into a guard that fails on violation, Principle #3 applied to your own copy.
+- `cross-model-review`: run a second vendor's coding model as a read-only adversarial reviewer over the staged diff, and keep re-reviewing the updated bundle until it converges or hits the tripwire. The model that wrote the code shares its own blind spots; this gate does not.
 
 **Hooks:**
 

@@ -313,7 +313,7 @@ function syncAvatars() {
   for (const z of scene.zones) for (const dsk of z.desks) {
     const s = dsk.s; seen.add(s.id);
     let a = scene.avatars.get(s.id);
-    const chair = { x: dsk.x + 35, y: dsk.y + 52 };
+    const chair = { x: dsk.x + 35, y: dsk.y + 34 };
     if (!a) {
       a = { sid: s.id, color: hue(s.id), x: chair.x + (Math.random()*120-60), y: chair.y + 40,
             tx: chair.x, ty: chair.y, mode: 'walk', phase: Math.random()*6, wait: 0,
@@ -444,7 +444,13 @@ function frame(t) {
     ctx.fillStyle = '#FFFFFF'; ctx.strokeStyle = live ? '#00D4AA' : '#E8E6E1'; ctx.lineWidth = live ? 2 : 1;
     rr(ctx, z.x, z.y, z.w, z.h, 14); ctx.fill(); ctx.stroke();
     ctx.font = '700 13.5px "Outfit","Segoe UI",sans-serif'; ctx.textAlign = 'left';
-    ctx.fillStyle = '#14181F'; ctx.fillText(z.p.name, z.x + 16, z.y + 24);
+    ctx.fillStyle = '#14181F';
+    let nm = z.p.name; const maxW = z.w - 100;
+    if (ctx.measureText(nm).width > maxW) {
+      while (nm.length > 4 && ctx.measureText(nm + '…').width > maxW) nm = nm.slice(0, -1);
+      nm = nm.trimEnd() + '…';
+    }
+    ctx.fillText(nm, z.x + 16, z.y + 24);
     ctx.font = '600 11px "Outfit","Segoe UI",sans-serif'; ctx.textAlign = 'right';
     ctx.fillStyle = '#98A1AD'; ctx.fillText(ago(z.p.newest_age) + ' ago', z.x + z.w - 14, z.y + 24);
     ctx.textAlign = 'left';
