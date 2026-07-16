@@ -15,7 +15,7 @@ Open http://localhost:3131. It refreshes every 4 seconds.
 ## What you get
 
 - **Board view.** Each project is a card, sorted by most recent activity; live projects get an accent edge. Each session shows a status dot (pulsing = actively writing, amber = idle, gray = asleep), a role label, the short session id, timing, and a two-line snippet of the last thing that session said.
-- **Office view.** The ambient version: each session is a small figure at a desk. The monitor glows and the figure types when the session is working. Hover a desk for the snippet. Same data, different mood.
+- **Office view.** The living version: every session is a small avatar in its project's room. Avatars walk to their desks, sit and type while their session is working (monitor glowing), get up and wander the room when idle, and pop a speech bubble of what they just said. Sleeping sessions leave an empty desk. Honors prefers-reduced-motion (static poses, no animation).
 - **Click-to-label roles.** Click any session name and assign it a role from that project's vocabulary (configurable), or a custom one. Labels persist in `mission_control.config.json`, which is auto-created next to the script and re-read live, so edits apply without a restart.
 
 ## Config
