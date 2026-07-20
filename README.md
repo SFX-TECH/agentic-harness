@@ -3,6 +3,7 @@
 > The operating system I wrap around coding agents to ship and maintain production software. Durable context, decision discipline, orchestrated sub-agents, and verification gates. This is the harness, open source. The products I build with it stay private; the way I build them is here.
 
 ![License](https://img.shields.io/badge/license-MIT-2ea44f)
+![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7a5cff)
 ![Built with](https://img.shields.io/badge/built%20with-Claude%20Code-7a5cff)
 ![Approach](https://img.shields.io/badge/approach-context%20as%20code-0a66c2)
 ![Orchestration](https://img.shields.io/badge/orchestration-one%20orchestrator%20%2B%20sub%20agents-3b5bdb)
@@ -13,6 +14,19 @@ I am [Jesse Jolly](https://linkedin.com/in/jessegjolly), solo founder and CTO of
 Anyone can vibe-code a demo in an afternoon. The hard part is shipping something real and then *operating* it for months without it rotting: keeping context durable across sessions, making decisions you can trace and trust, coordinating more work than one agent can hold in its head, and verifying every change against the truth instead of the model's confidence. That gap is the harness. This is mine, generalized and stripped of anything proprietary.
 
 > **In plain terms:** Coding agents can write software quickly, but they forget everything between sessions and will happily claim a job is finished when it is not. This repo is the set of habits and guardrails Jesse puts around an agent so it can build real products and keep them running for months, not just produce a demo. The support system is public here; the products built with it are not.
+
+---
+
+## Contents
+
+- [Install (Claude Code plugin)](#install-claude-code-plugin)
+- [Why a harness](#why-a-harness)
+- [How it works](#how-it-works)
+- [What is in here](#what-is-in-here)
+- [The principles, in one breath](#the-principles-in-one-breath)
+- [Proven in production](#proven-in-production)
+- [Use it](#use-it)
+- [Contributing and adapting](#contributing-and-adapting)
 
 ---
 
@@ -136,6 +150,12 @@ The harness is intentionally small and copy-paste friendly:
 4. Read `PRINCIPLES.md` and `PATTERNS.md`, then start banking your own. The principles that matter most are the ones you earn.
 
 MIT licensed. Take what is useful, make it yours.
+
+---
+
+## Contributing and adapting
+
+This is an opinionated harness, not a framework seeking feature parity. The most useful contribution is a battle-tested principle or pattern earned from a real ship: open an issue describing the failure it prevents and the discipline that answers it. Bug reports on the templates or the plugin are welcome the same way. Fork it, strip what does not fit, and make it yours, that is the intended use, not a limitation.
 
 ---
 
