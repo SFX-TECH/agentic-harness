@@ -32,6 +32,9 @@ You can let an agent verify a live financial or medical system without ever pull
 ## 10. One source of truth, generated outward
 When the same logic has to exist in two places (a TypeScript module and an automation node, a schema and its types), do not maintain both by hand. Generate one from the other and stamp it with a version, so the two cannot drift. Drift between two hand-maintained copies is a bug that ships silently.
 
+## 11. Measure the output, do not opine about it
+A reviewer, human or model, hands you a judgment you then have to judge. A measurement hands you a number you can track over time, compare against a public baseline, and give to a skeptic. Whether agent-written code is any good is currently argued in anecdotes when it could simply be measured: duplication percentage, mutation score, scanner findings after triage, complexity ranking. Reach for the gauge before the opinion, and save reviewers for the judgment calls no tool can make. Learned by running exactly this on a live codebase: an afternoon of read-only measurement surfaced a privilege-escalation-class defect that a fleet of review agents and eleven thousand passing tests had not. See [`QUALITY-GAUGE.md`](QUALITY-GAUGE.md).
+
 ---
 
 These are abstracted from real production work and contain no client data or application internals. The principle is the asset; the project that taught it stays private.
