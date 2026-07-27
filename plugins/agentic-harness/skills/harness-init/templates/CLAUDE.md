@@ -3,13 +3,13 @@
 This file is auto-loaded by every coding-agent session in this workspace. It inlines the memory bank so every session starts with current decisions and state, no matter how long since the last one. Keep it short. Long-form context lives in the files this points at.
 
 ## Locked decisions (the spine)
-@.memory-bank/decisions.md
+@.claude/memory-bank/decisions.md
 
 ## Current state
-@.memory-bank/active-context.md
+@.claude/memory-bank/active-context.md
 
 ## Progress log
-@.memory-bank/progress.md
+@.claude/memory-bank/progress.md
 
 ---
 

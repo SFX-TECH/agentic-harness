@@ -1,0 +1,12 @@
+# Shell scripts must check out with LF on every platform.
+#
+# Without this, Git for Windows (core.autocrlf=true by default) converts the
+# committed LF blob to CRLF in the working tree. A CRLF shell script can fail
+# under stricter shells: the shebang is read as "bash\r" and every line carries
+# a trailing carriage return that corrupts variable values and comparisons.
+# Claude Code installs this plugin by cloning the repo, so a Windows installer
+# would get the converted copy.
+*.sh text eol=lf
+
+# Same reasoning for anything else interpreted by a POSIX shell.
+*.bash text eol=lf
