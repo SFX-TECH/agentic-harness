@@ -1,0 +1,33 @@
+# Agentic harness MCP loadout for Codex.
+#
+# Append to ~/.codex/config.toml, keeping any [mcp_servers.*] blocks already
+# there. Same four servers as the Claude Code plugin's .mcp.json, same purpose,
+# no API keys required. Verified resolving on npm 2026-07-27.
+#
+# Difference from Claude Code: there is no ${CLAUDE_PROJECT_DIR} equivalent, so
+# the filesystem server takes "." and you launch Codex from the project root.
+# Replace it with an absolute path if you prefer.
+
+# Current library and framework documentation, so the agent stops answering
+# from stale training memory. The single highest-value server in the set.
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+
+# Explicit reasoning chains for problems worth decomposing before acting.
+[mcp_servers.sequential-thinking]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+
+# File access beyond the working directory, scoped to the path you pass.
+[mcp_servers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "."]
+
+# Browser automation: drive a real UI, verify what shipped, capture evidence.
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest"]
+
+# Optional, if a server is slow to start on your machine:
+# startup_timeout_sec = 120

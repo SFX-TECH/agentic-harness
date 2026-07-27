@@ -106,6 +106,7 @@ Real, usable scaffolding plus the principles behind it. Copy the templates, keep
 - **[`WORKSPACE-HUB.md`](WORKSPACE-HUB.md)**: the design of my local workspace hub: a fully offline semantic index and knowledge graph (search by meaning, plus a map of how the pieces connect) over an entire multi-project workspace, exposed to agents over MCP, so any session can retrieve the right context from any project without anything leaving the machine.
 - **[`MCP-LOADOUT.md`](MCP-LOADOUT.md)**: the Model Context Protocol servers I run, what each is for, and the rule that governs all of them: prefer the canonical source over the model's memory.
 - **[`QUALITY-GAUGE.md`](QUALITY-GAUGE.md)**: how to know whether agent-built software is any good instead of arguing about it. Five cheap measurements (duplication, static security, mutation, coverage, complexity), what each criticism actually claims, and the real numbers they returned on a shipping production codebase, including the one that came back badly and the rule that fell out of it.
+- **[`codex/`](codex/README.md)**: running the same harness on Codex (OpenAI's coding CLI) instead of Claude Code. The MCP loadout translated to Codex's TOML config, the principles as `AGENTS.md`, and an honest table of what ports and what does not, because the thinking is runtime-agnostic and the packaging is not.
 
 ---
 
