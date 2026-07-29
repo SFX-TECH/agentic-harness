@@ -14,6 +14,9 @@ For a mature project, define named sub-agents with narrow jobs: a build-verifier
 ## Pre-merge code review against canonical source
 Before any change merges, a code-reviewer sub-agent checks it, and it checks against canonical sources (the installed SDK types, the live schema, the actual security policies), not against the pull request's own description. The description says what the author believes; the canonical source says what is true. The reviewer reads the truth, runs the gates, and posts findings.
 
+## The cross-model review gate
+Every substantive diff is reviewed by a second coding agent from a different vendor lineage before it ships. Reviewers from the author's own family share the author's blind spots; an independent lineage was trained differently, so it disagrees in useful places. The gate has a hard bar (zero high-severity findings) and three disciplines, each earned the hard way. Run diff-scoped for the routine pass and whole-module rounds for depth: the diff gate is fast but blind to untouched code, and a whole-module review once found twelve real defects in a file the diff gate had just passed clean. Adjudicate every finding instead of auto-applying: in one cycle, two of the reviewer's suggested fixes would themselves have caused harm. And re-gate the fix: a review that converged to zero highs says nothing about the code you wrote in response, and one high-severity fail-open was caught only by a wider re-gate after nine converged rounds had signed off.
+
 ## Phase gates
 Break a large build into numbered phases, each with explicit exit criteria written down before the phase starts. A phase is not done until its checklist verifiably passes. While a phase is in flight, the next phase's spec stays closed, so scope does not leak backward. Gates make "are we done" an answerable question.
 

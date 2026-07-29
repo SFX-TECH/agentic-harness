@@ -7,3 +7,6 @@ node_modules/
 .train-runs/
 .vercel/
 .wrangler/
+
+# editor/tool config spillover, not part of the harness
+.clinerules-*
