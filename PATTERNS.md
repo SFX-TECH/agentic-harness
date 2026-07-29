@@ -29,6 +29,12 @@ To verify a live system that holds private data, run redacted scripts that emit 
 ## Single-source code generation
 When two representations must agree, generate one from the other. A single TypeScript source can emit an automation node and stamp it with a version, so the running automation and the code can never silently diverge. Maintain one, generate the rest.
 
+## Domain skill packs
+Distill domain expertise into versioned instruction files the agent loads only when a task touches that domain: the correct ordering of a family of system commands, the safety pattern for a class of destructive operation, the quirks of one vendor integration. A pack is updated at session end when a correction or edge case was earned, so the knowledge compounds instead of being relearned. Two disciplines keep packs trustworthy: they state rules with the evidence that earned them, and they get the same provenance and hygiene scrutiny as code, because an instruction file can teach a defect back into a codebase long after the code was fixed (see `PRINCIPLES.md`, principle 12).
+
+## Verify on the user's hardware, not yours
+A dev machine overstates every performance number and hides every resource-pressure bug. Keep a sandbox VM deliberately specced to the product's modal user tier (the RAM and core count most real users actually have), with clean snapshots so a break-and-fix cycle is repeatable in seconds. Two rules earned the hard way: a green status field proves nothing, screenshot the actual screen; and measure on the modal tier before shipping anything performance-sensitive, because the machine that decides whether a feature is good enough is the user's, not yours.
+
 ## MCP as canonical truth
 Wire the tools that hold the truth (the database, the deploy platform, the code-intelligence index, the docs) as Model Context Protocol servers, and reach for them instead of the model's memory. Check the schema through the database tool before writing SQL. Fetch current SDK behavior through the docs tool instead of recalling it. The model's memory is a starting hypothesis; the MCP server is the fact.
 
