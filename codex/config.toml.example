@@ -1,33 +1,43 @@
 # Agentic harness MCP loadout for Codex.
 #
-# Append to ~/.codex/config.toml, keeping any [mcp_servers.*] blocks already
-# there. Same four servers as the Claude Code plugin's .mcp.json, same purpose,
-# no API keys required. Verified resolving on npm 2026-07-27.
+# Append these tables to ~/.codex/config.toml, keep unrelated existing tables,
+# then restart Codex. Verified with real tool calls on Codex CLI 0.143.0,
+# Windows, 2026-07-28.
 #
-# Difference from Claude Code: there is no ${CLAUDE_PROJECT_DIR} equivalent, so
-# the filesystem server takes "." and you launch Codex from the project root.
-# Replace it with an absolute path if you prefer.
+# Command-based MCP servers use stdio automatically. Direct npx worked on the
+# verified Windows installation, so cmd /c and an absolute npx path are not
+# required there.
 
-# Current library and framework documentation, so the agent stops answering
-# from stale training memory. The single highest-value server in the set.
+# Current library and framework documentation.
 [mcp_servers.context7]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp"]
 
-# Explicit reasoning chains for problems worth decomposing before acting.
+# Structured decomposition for multi-step problems.
 [mcp_servers.sequential-thinking]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
 
-# File access beyond the working directory, scoped to the path you pass.
+# File access is limited to the roots listed after the package name.
+# "." allows only the launch directory. Add an exact absolute directory as
+# another argument only after reviewing what that grant exposes.
 [mcp_servers.filesystem]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-filesystem", "."]
 
-# Browser automation: drive a real UI, verify what shipped, capture evidence.
+# Browser automation.
 [mcp_servers.playwright]
 command = "npx"
 args = ["-y", "@playwright/mcp@latest"]
 
-# Optional, if a server is slow to start on your machine:
+# Optional per-server settings. The defaults were sufficient in verification.
+# Put either setting inside the server table it should affect.
+#
 # startup_timeout_sec = 120
+# tool_timeout_sec = 120
+
+# Codex 0.143.0 otherwise cancelled this tool in isolated codex exec runs.
+# This permits browser navigation without a prompt. Remove this table when
+# every navigation should require an interactive approval.
+[mcp_servers.playwright.tools.browser_navigate]
+approval_mode = "approve"

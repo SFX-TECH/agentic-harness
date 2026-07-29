@@ -1,108 +1,235 @@
 # Running the harness on Codex
 
-> **In plain terms:** The plugin in this repo installs into Claude Code. Codex (OpenAI's coding CLI) is a different runtime with a different config format, so the plugin does not install there. What ports is everything that matters: the principles, the discipline, and the tool loadout. This folder is the Codex-side setup, plus an honest list of what does not carry over.
+This adapter was exercised end to end on Windows with Codex CLI 0.143.0 on
+2026-07-28. All four MCP servers started and handled real tool calls. The
+verification also found two adapter assumptions and one unrelated user-config
+problem that can make the setup look broken.
 
-The harness is two things stacked. Underneath are the **principles and discipline**, which are runtime-agnostic and port to any coding agent. On top is the **packaging**, which is Claude Code specific. Only the packaging fails to port.
+## What actually failed
 
-Verified on Codex CLI 0.143.0, Windows, 2026-07-27.
-
----
-
-## What ports, and what does not
-
-| Harness piece | Claude Code | Codex | Notes |
-|---|---|---|---|
-| Principles and patterns | plugin skills | `AGENTS.md` | Ports fully. Same text, different delivery. |
-| MCP tool loadout | `.mcp.json` | `config.toml` | Ports, but the format differs. Conversion below. |
-| Memory bank (durable context) | `/harness-init` scaffolds it | copy `templates/` by hand | The files are plain markdown. Only the scaffolder is Claude-specific. |
-| Sub-agent fleet | `agents/*.md` | no direct equivalent | Codex has no first-class named sub-agent registry. Express the same decomposition inside the task prompt instead. |
-| Skills (auto-triggered) | `skills/*/SKILL.md` | no direct equivalent | Fold the load-bearing ones into `AGENTS.md` so they are always in context rather than triggered. |
-| SessionStart hook | `hooks/hooks.json` | no direct equivalent | Run the same script manually, or have the first prompt ask for the state it would have surfaced. |
-| Cross-model review gate | calls Codex from Claude | calls Claude from Codex | Ports, and inverts cleanly. The point is a reviewer of different lineage, whichever side you start from. |
-
-The honest summary: **the thinking ports, the automation does not.** On Codex you get the same discipline with more of it carried by the prompt and less by the runtime.
-
----
-
-## 1. The MCP loadout in Codex format
-
-Claude Code reads `.mcp.json`. Codex reads `~/.codex/config.toml` and uses TOML tables. Same four servers, same purpose, no API keys:
+At reproduction time, the live `C:\Users\jesse\.codex\config.toml` already
+contained the four target servers, along with ten other stdio servers. Its
+target entries used `cmd /c npx`; the filesystem entry allowed two absolute
+SimpleFix paths; no target entry set a startup timeout. The file also set:
 
 ```toml
-[mcp_servers.context7]
-command = "npx"
-args = ["-y", "@upstash/context7-mcp"]
+model = "gpt-5.6-sol"
+approval_policy = "on-request"
+approvals_reviewer = "auto_review"
+```
 
-[mcp_servers.sequential-thinking]
-command = "npx"
-args = ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+Three different failures appeared during reproduction:
 
+1. **The default model prevented a CLI task from starting.** Codex CLI 0.143.0
+   returned:
+
+   ```text
+   The 'gpt-5.6-sol' model requires a newer version of Codex. Please upgrade
+   to the latest app or CLI and try again.
+   ```
+
+   The MCP proofs first used `-m gpt-5.4`, which completed successfully on this
+   installed CLI. The live config was then changed from `gpt-5.6-sol` to
+   `gpt-5.4`. A new `codex exec` task with no model override returned `OK`.
+   This model problem was in the surrounding user config, not in this
+   adapter's MCP tables.
+
+2. **The filesystem example allowed only the working directory.** With `.` as
+   its only allowed root, the requested outside-workdir read returned:
+
+   ```text
+   Access denied - path outside allowed directories:
+   C:\Users\jesse\.codex\AGENTS.md not in D:\agentic-harness
+   ```
+
+   Adding the exact outside directory as a second server argument made the
+   same tool call succeed.
+
+3. **Noninteractive Playwright needed an MCP approval decision.** In an
+   isolated `codex exec` run, `browser_navigate` returned
+   `user cancelled MCP tool call`, including with `-a never`. A narrow
+   `mcp_servers.playwright.tools.browser_navigate.approval_mode = "approve"`
+   override made the call succeed without disabling the sandbox. The actual
+   user config also succeeded because its existing automatic approval reviewer
+   approved the call.
+
+The following suspected causes were ruled out by direct runs:
+
+- `[mcp_servers.NAME]` is the correct table shape in 0.143.0.
+- `command = "npx"` works directly on this Windows installation. A full path
+  and `cmd /c` are not required here.
+- stdio transport is inferred for command-based servers.
+- the default startup timeout was sufficient. No `startup_timeout_sec` change
+  was needed.
+
+One environment trap is worth separating from the adapter. A CLI process
+started inside a restricted Codex desktop command sandbox used
+`C:\Users\CodexSandboxOffline\.codex` as `CODEX_HOME`, so `codex mcp list`
+reported `No MCP servers configured yet.` The same command from the normal
+user environment loaded `C:\Users\jesse\.codex\config.toml` and reported 14
+enabled stdio servers. Run configuration diagnostics from a normal terminal,
+or inspect `codex doctor` and confirm the `config.toml` path it reports.
+
+## Working MCP configuration
+
+Append the four tables from
+[`config.toml.example`](config.toml.example) to `~/.codex/config.toml`, keeping
+unrelated existing tables. Restart Codex after editing, then run the checks
+below.
+
+The base filesystem entry is deliberately project-scoped:
+
+```toml
 [mcp_servers.filesystem]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-filesystem", "."]
-
-[mcp_servers.playwright]
-command = "npx"
-args = ["-y", "@playwright/mcp@latest"]
 ```
 
-Append that to `~/.codex/config.toml`, keeping any blocks already there.
+The server denies every path outside the roots in `args`. To allow a second
+root, add the exact absolute directory after reviewing its contents:
 
-Two differences worth knowing. Claude Code expands `${CLAUDE_PROJECT_DIR}` for the filesystem server's root; Codex has no equivalent variable, so pass `.` and launch from the project directory, or hardcode an absolute path. And if a server is slow to start on your machine, Codex accepts `startup_timeout_sec` inside the server's table, which Claude Code does not need.
-
-All four packages were confirmed live on npm and one was confirmed starting on stdio during verification.
-
----
-
-## 2. The principles, as `AGENTS.md`
-
-Codex reads `~/.codex/AGENTS.md` globally and an `AGENTS.md` at a project root for project scope. That is the natural home for what the plugin delivers as skills.
-
-Copy [`PRINCIPLES.md`](../PRINCIPLES.md) in, then add the operating rules the plugin would otherwise enforce automatically. At minimum:
-
-```markdown
-## Operating discipline
-
-- Verify against canonical source, never model memory. Read the real file, the
-  live schema, the installed SDK, before relying on any claim about them.
-- Never report a result you did not produce. If a command did not run, say so.
-  No invented test counts, no assumed gate verdicts.
-- One orchestrator, sequential sub-tasks. Decompose, do each piece, integrate.
-  Do not fan out work that will collide.
-- Audit before building on anything substantial: find the drift while it is
-  still cheap.
-- Mechanize safety. If a rule matters, put it in a test or a gate rather than
-  relying on it being remembered.
-- Measure the output rather than opining about it. See QUALITY-GAUGE.md.
+```toml
+args = [
+    "-y",
+    "@modelcontextprotocol/server-filesystem",
+    ".",
+    'C:\path\you\intend\to\allow',
+]
 ```
 
-Those exist as auto-triggering skills in the Claude plugin. On Codex they are always-on context, which is arguably stronger and definitely more token-hungry.
+Do not grant a home directory or credential directory merely to make a test
+pass. Every child of an allowed root becomes readable through that MCP server.
 
----
+The isolated `codex exec` proof needed an approval route for browser
+navigation. The example approves only the tool used by that proof:
 
-## 3. The memory bank
+```toml
+[mcp_servers.playwright.tools.browser_navigate]
+approval_mode = "approve"
+```
 
-Identical on both runtimes, because it is just markdown. Copy [`templates/`](../templates/) into your project and keep the three files doing their distinct jobs: `decisions.md` append-only, `active-context.md` replaced not appended, `progress.md` chronological. Point `AGENTS.md` at them so every Codex session reads them first.
+That setting permits browser navigation without a prompt. Remove it if every
+navigation should remain interactive. Do not replace it with
+`--dangerously-bypass-approvals-and-sandbox` on a normal workstation.
 
-The only loss is the `/harness-init` scaffolder and the SessionStart hook that surfaces state automatically. Both are convenience, not substance.
+Check which config Codex loaded and which servers it sees:
 
----
+```powershell
+codex doctor --summary
+codex mcp list
+```
 
-## 4. Cross-model review, which is the piece that gets better
+On the verified machine, `codex doctor --summary` reported
+`14 server (14 stdio)`, and `codex mcp list` showed `context7`,
+`filesystem`, `playwright`, and `sequential-thinking` as enabled.
 
-The [cross-model review](../plugins/agentic-harness/skills/cross-model-review/SKILL.md) skill has Claude call Codex to review a diff before commit. Running the harness on Codex simply inverts it: Codex writes, Claude reviews.
+## End-to-end proof
 
-Do not skip this because both are strong models. The value is **lineage, not capability**. In production use, a same-family reviewer repeatedly missed defects that a different-lineage reviewer caught, including a privilege-escalation path in code that had already passed several rounds of same-family review. Reviewers share blind spots with the models they came from.
+The proof used isolated MCP configuration overrides, Codex CLI 0.143.0,
+`gpt-5.4`, and JSONL output. The tool-call events, not only the final model
+summary, were checked.
 
----
+### Context7
 
-## Verification status
+Tools called:
 
-Checked on 2026-07-27 rather than assumed:
+```text
+context7.resolve-library-id
+context7.query-docs
+```
 
-- Codex CLI 0.143.0 present, `~/.codex/config.toml` confirmed using `[mcp_servers.NAME]` TOML tables and `~/.codex/AGENTS.md` confirmed as the instruction file.
-- All four MCP packages resolve on npm at current versions.
-- One server confirmed starting on stdio.
-- The Claude Code SessionStart hook confirmed executing on Windows and reporting correct git state.
+Result: React resolved to `/reactjs/react.dev`. The current official
+documentation said that an Effect may return a cleanup function, that React
+runs cleanup before rerunning an Effect whose dependencies changed, and that
+it runs cleanup once more on unmount. Context7 also returned the official
+disconnect and stale-async-response examples.
 
-What has **not** been verified end to end: a full Codex session running with this loadout on a real task. If you do that, record the result here rather than assuming it works.
+### Filesystem
+
+Tool called:
+
+```text
+filesystem.read_text_file
+```
+
+The first call, with only `D:\agentic-harness` allowed, produced the exact
+access-denied error shown above. The final proof allowed
+`C:\Users\Public\Documents` as a second root. Codex then read
+`C:\Users\Public\Documents\desktop.ini` from outside the working directory and
+returned its first nonempty line:
+
+```text
+[.ShellClassInfo]
+```
+
+### Sequential thinking
+
+Tool called three times:
+
+```text
+sequential-thinking.sequentialthinking
+```
+
+Result: the server recorded thoughts 1 through 3 and returned
+`nextThoughtNeeded: false` on the third call. The resulting plan was to verify
+each server through its own tool surface, include positive and negative
+permission cases, capture exact failures, and finish with live browser
+navigation.
+
+### Playwright
+
+Tool called:
+
+```text
+playwright.browser_navigate
+```
+
+Without an approval route, the exact result was:
+
+```text
+user cancelled MCP tool call
+```
+
+With the per-tool `approval_mode = "approve"` override, the MCP result was:
+
+```text
+Page URL: https://example.com/
+Page Title: Example Domain
+```
+
+The same navigation also succeeded against the actual loaded user config,
+where `approvals_reviewer = "auto_review"` was already enabled.
+
+## What ports, and what needs adaptation
+
+| Harness piece | Verified Codex 0.143.0 status | Evidence and limit |
+|---|---|---|
+| Principles and patterns | Ports | A global `AGENTS.md` instruction caused the proof session to read the required prompt architecture file before delegating. Plain instruction text is portable. |
+| MCP tool loadout | Ports | All four servers handled real calls. Codex uses `config.toml`, explicit filesystem roots, and MCP tool approval policy. |
+| Memory bank files | Ports as data | The Markdown files need no runtime conversion. Automatic creation and startup surfacing are separate capabilities. |
+| Sub-agent execution | Ports | `codex features list` reported `multi_agent` stable and enabled. A real `spawn_agent` call read `PRINCIPLES.md` and returned `Verify against canonical source`. The Claude-specific named files in `agents/*.md` were not imported or tested. |
+| Skills | Ports with path and content review | Codex attempted to load a user `SKILL.md` during every proof session, and the current manual documents `.agents/skills`. The existing `harness-principles` content is portable. `harness-init` is not drop-in because it uses `CLAUDE_SKILL_DIR`, `CLAUDE_PROJECT_DIR`, `$ARGUMENTS`, `CLAUDE.md`, and `.claude/memory-bank`. |
+| Hooks | Codex has an equivalent, but this hook is not ported | `codex features list` reported hooks stable, and the CLI exposes hook trust handling. The repository's Bash `SessionStart` hook uses Claude-specific variables and was not executed by Codex in this verification. |
+| Plugin packaging | Codex has a plugin system, but this package is not verified | `codex plugin list` and `codex plugin --help` ran successfully. The Claude plugin in this repository was not installed as a Codex plugin, so this adapter does not claim package-level compatibility. |
+| Cross-model review | Method only, not verified here | The review discipline is runtime-independent, but a Codex-to-Claude review invocation was not part of this MCP proof. |
+
+The earlier summary that "the thinking ports, the automation does not" is no
+longer accurate for this Codex version. MCP, sub-agent execution, skills,
+hooks, and plugins all have runtime surfaces. What does not automatically port
+is Claude-specific packaging, paths, variables, named-agent definitions, and
+hook scripts. Those pieces require a deliberate Codex package rather than an
+instruction to pretend the runtime has no equivalent.
+
+## Other diagnostics observed
+
+Codex 0.143.0 also emitted these unrelated errors while the MCP calls still
+completed:
+
+```text
+failed to load models cache: missing field `supports_reasoning_summaries`
+failed to load skill C:\Users\jesse\.agents\skills\sfx-audit\SKILL.md:
+invalid YAML
+```
+
+They are not caused by this adapter. They should be fixed separately because
+they add noise and the invalid skill is skipped.
