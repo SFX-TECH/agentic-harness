@@ -1,9 +1,10 @@
 # Running the harness on Codex
 
-This adapter was exercised end to end on Windows with Codex CLI 0.143.0 on
-2026-07-28. All four MCP servers started and handled real tool calls. The
-verification also found two adapter assumptions and one unrelated user-config
-problem that can make the setup look broken.
+This adapter was reproduced on Codex CLI 0.143.0, repaired, then exercised end
+to end on Windows with Codex CLI 0.146.0 and the configured GPT-5.6 Sol default
+on 2026-07-28. All four MCP servers started and handled real tool calls. The
+verification also found two adapter assumptions and one CLI-version problem
+that can make the setup look broken.
 
 ## What actually failed
 
@@ -28,11 +29,24 @@ Three different failures appeared during reproduction:
    to the latest app or CLI and try again.
    ```
 
-   The MCP proofs first used `-m gpt-5.4`, which completed successfully on this
-   installed CLI. The live config was then changed from `gpt-5.6-sol` to
-   `gpt-5.4`. A new `codex exec` task with no model override returned `OK`.
-   This model problem was in the surrounding user config, not in this
-   adapter's MCP tables.
+   A temporary `gpt-5.4` pin proved that the MCP configuration was independent
+   of the model failure. The CLI was then updated from 0.143.0 to 0.146.0.
+   An explicit GPT-5.6 Sol task returned `GPT-5.6-SOL-OK`, the live default was
+   restored to `gpt-5.6-sol`, and the final four-server proof passed without
+   any `-m` model override. The blocker was the old CLI, not model entitlement
+   and not the adapter's MCP tables.
+
+   The first `codex update` attempt failed before installation because the
+   managed shell did not pass the Windows `OS` environment value to OpenAI's
+   installer:
+
+   ```text
+   install.ps1 supports Windows only. Use install.sh on macOS or Linux.
+   ```
+
+   Running the same official installer with `OS=Windows_NT` scoped to that
+   installer process resolved version 0.146.0, verified its checksums, and
+   installed it successfully.
 
 2. **The filesystem example allowed only the working directory.** With `.` as
    its only allowed root, the requested outside-workdir read returned:
@@ -55,7 +69,7 @@ Three different failures appeared during reproduction:
 
 The following suspected causes were ruled out by direct runs:
 
-- `[mcp_servers.NAME]` is the correct table shape in 0.143.0.
+- `[mcp_servers.NAME]` is the correct table shape in 0.143.0 and 0.146.0.
 - `command = "npx"` works directly on this Windows installation. A full path
   and `cmd /c` are not required here.
 - stdio transport is inferred for command-based servers.
@@ -125,9 +139,11 @@ On the verified machine, `codex doctor --summary` reported
 
 ## End-to-end proof
 
-The proof used isolated MCP configuration overrides, Codex CLI 0.143.0,
-`gpt-5.4`, and JSONL output. The tool-call events, not only the final model
-summary, were checked.
+The final proof used Codex CLI 0.146.0, the configured `gpt-5.6-sol` default,
+no `-m` model override, and JSONL output. Temporary MCP overrides supplied the
+public filesystem test root and the narrow Playwright navigation approval. The
+tool-call events, not only the final model summary, were checked. All four
+operations completed with no MCP failures.
 
 ### Context7
 
@@ -202,7 +218,7 @@ where `approvals_reviewer = "auto_review"` was already enabled.
 
 ## What ports, and what needs adaptation
 
-| Harness piece | Verified Codex 0.143.0 status | Evidence and limit |
+| Harness piece | Verified Codex 0.143.0 and 0.146.0 status | Evidence and limit |
 |---|---|---|
 | Principles and patterns | Ports | A global `AGENTS.md` instruction caused the proof session to read the required prompt architecture file before delegating. Plain instruction text is portable. |
 | MCP tool loadout | Ports | All four servers handled real calls. Codex uses `config.toml`, explicit filesystem roots, and MCP tool approval policy. |
@@ -231,5 +247,7 @@ failed to load skill C:\Users\jesse\.agents\skills\sfx-audit\SKILL.md:
 invalid YAML
 ```
 
-They are not caused by this adapter. They should be fixed separately because
-they add noise and the invalid skill is skipped.
+The 0.146.0 update eliminated the model-cache schema error. The invalid
+`sfx-audit` skill YAML error still appeared and that skill was skipped. The
+0.146.0 run also reported missing authorization for unrelated Figma and Vercel
+plugin MCPs; neither affected the four key-free servers verified here.

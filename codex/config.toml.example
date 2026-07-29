@@ -1,8 +1,8 @@
 # Agentic harness MCP loadout for Codex.
 #
 # Append these tables to ~/.codex/config.toml, keep unrelated existing tables,
-# then restart Codex. Verified with real tool calls on Codex CLI 0.143.0,
-# Windows, 2026-07-28.
+# then restart Codex. Reproduced on Codex CLI 0.143.0 and verified with the
+# configured GPT-5.6 Sol default on Codex CLI 0.146.0, Windows, 2026-07-28.
 #
 # Command-based MCP servers use stdio automatically. Direct npx worked on the
 # verified Windows installation, so cmd /c and an absolute npx path are not
