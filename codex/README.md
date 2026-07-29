@@ -243,11 +243,12 @@ completed:
 
 ```text
 failed to load models cache: missing field `supports_reasoning_summaries`
-failed to load skill C:\Users\jesse\.agents\skills\sfx-audit\SKILL.md:
+failed to load skill <home>\.agents\skills\<a-local-skill>\SKILL.md:
 invalid YAML
 ```
 
 The 0.146.0 update eliminated the model-cache schema error. The invalid
-`sfx-audit` skill YAML error still appeared and that skill was skipped. The
-0.146.0 run also reported missing authorization for unrelated Figma and Vercel
-plugin MCPs; neither affected the four key-free servers verified here.
+skill YAML error (a locally authored skill unrelated to this harness) still
+appeared and that skill was skipped. The 0.146.0 run also reported missing
+authorization for unrelated design and hosting plugin MCPs; neither affected
+the four key-free servers verified here.
