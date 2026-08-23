@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "agentic-harness",
-  "version": "1.4.0",
-  "description": "The operating system Jesse Jolly wraps around coding agents to ship and operate production software: durable context, one orchestrator plus sequential sub-agents, and verify-against-canonical-source gates.",
+  "version": "1.5.0",
+  "description": "The operating system Jesse Jolly wraps around coding agents to ship and operate production software: durable context, one orchestrator plus sequential sub-agents, verify-against-canonical-source gates, and optional prospective evidence.",
   "author": {
     "name": "Jesse Jolly",
     "url": "https://jessejolly.com"
@@ -17,6 +17,7 @@
     "memory-bank",
     "sub-agents",
     "verification",
+    "prospective-evidence",
     "mcp",
     "claude-code"
   ]

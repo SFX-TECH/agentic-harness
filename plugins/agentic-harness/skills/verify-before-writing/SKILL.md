@@ -1,6 +1,7 @@
 ---
 name: verify-before-writing
-description: The anti-hallucination discipline for writing code against a system too big to hold in context. Before writing code that touches a schema, a route, an API, or a convention you have not looked at THIS session, probe the real thing first, a column probe, a route probe, a type read. The failure this kills: writing correct-looking code against an imagined version of the system instead of the real one. Use in any codebase with more surface than one context window.
+description: >-
+  The anti-hallucination discipline for writing code against a system too big to hold in context. Before writing code that touches a schema, a route, an API, or a convention you have not looked at THIS session, probe the real thing first, a column probe, a route probe, a type read. The failure this kills: writing correct-looking code against an imagined version of the system instead of the real one. Use in any codebase with more surface than one context window.
 ---
 
 The most expensive class of agent bug is code written against a memory. The table had that column last month; the route moved; the helper was renamed. The code compiles, reads clean, reviews fine, and fails at runtime against the real system. The cure is cheap: probe before you write.

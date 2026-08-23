@@ -1,6 +1,6 @@
 ---
 name: harness-init
-description: Scaffold the agentic harness into the current project, a CLAUDE.md session bootstrap plus a memory bank (decisions, active context, progress). Run once per project to give every future Claude Code session durable context.
+description: Scaffold the agentic harness into the current project, a CLAUDE.md session bootstrap plus a memory bank (decisions, active context, progress) and an optional prospective-evidence contract slot. Run once per project to give every future Claude Code session durable context.
 disable-model-invocation: true
 argument-hint: "[--force]"
 ---
@@ -17,6 +17,6 @@ The template files live in this skill's own directory at `${CLAUDE_SKILL_DIR}/te
 
 3. Create the memory bank directory `${CLAUDE_PROJECT_DIR}/.claude/memory-bank/` and copy every file from `${CLAUDE_SKILL_DIR}/templates/memory-bank/` into it: decisions.md, active-context.md, progress.md.
 
-4. Report the files created, then tell the user the next step in one line: open CLAUDE.md and fill in the real stack, locked decisions, and current state, then keep the memory bank updated as a habit.
+4. Report the files created, then tell the user the next step in one line: open CLAUDE.md and fill in the real stack, locked decisions, current state, and prospective-evidence contract if the project has one, then keep the memory bank updated as a habit.
 
 Read the template files before writing them so you copy their real contents verbatim. Do not paraphrase or summarize the templates; they are the harness, copied for the user to fill in.

@@ -1,6 +1,6 @@
 # Agentic Harness
 
-> The operating system I wrap around coding agents to ship and maintain production software. Durable context, decision discipline, orchestrated sub-agents, and verification gates. This is the harness, open source. The products I build with it stay private; the way I build them is here.
+> The operating system I wrap around coding agents to ship and maintain production software. Durable context, decision discipline, orchestrated sub-agents, verification gates, and optional prospective outcome evidence. This is the harness, open source. The products I build with it stay private; the way I build them is here.
 
 ![License](https://img.shields.io/badge/license-MIT-2ea44f)
 ![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-7a5cff)
@@ -89,6 +89,8 @@ flowchart TD
 
 The agent does the work. The harness decides what context it gets, how the work is split, how it is checked, and what is remembered. That control system is the difference between a clever demo and software you can run a business on.
 
+Projects can also opt into a prospective outcome ledger. Each qualifying real code task is registered before outcome-bearing work, its actual verification sequence is retained, and its result is finalized truthfully. The ordinary ledger stays open after its initial maturity floor; separately preregistered experiments keep their fixed sample caps. This makes long-term harness drift visible without turning routine work into an uncontrolled experiment.
+
 ---
 
 ## What is in here
@@ -98,6 +100,7 @@ The agent does the work. The harness decides what context it gets, how the work 
 Real, usable scaffolding plus the principles behind it. Copy the templates, keep the conventions, and you have the same backbone I run across every project.
 
 - **[`templates/CLAUDE.md`](templates/CLAUDE.md)**: the project bootstrap every session loads first: locked decisions, current state, behavioral defaults, tooling-invocation defaults, and the anti-patterns to avoid. The single file that makes a fresh agent session start informed instead of cold.
+- **[`templates/AGENTS.md`](templates/AGENTS.md)**: the Codex-native project bootstrap for the same runtime-neutral disciplines, with explicit memory-bank reads instead of Claude-specific imports.
 - **[`CONTEXT-AS-CODE.md`](CONTEXT-AS-CODE.md)**: the memory bank: `decisions.md` (append-only architectural log), `active-context.md` (this week only, replaced not appended), `progress.md` (chronological shipped log). Why each exists and how they keep their distinct jobs.
 - **[`templates/decisions.md`](templates/decisions.md)**, **[`templates/active-context.md`](templates/active-context.md)**, **[`templates/progress.md`](templates/progress.md)**: drop-in memory-bank templates.
 - **[`templates/AUTONOMOUS_LOOP.md`](templates/AUTONOMOUS_LOOP.md)**: the sub-agent orchestration contract: when to spawn, how to spec a sub-agent, the invoke-when matrix, and why sequential beats a swarm under real-world rate limits.
@@ -106,8 +109,8 @@ Real, usable scaffolding plus the principles behind it. Copy the templates, keep
 - **[`WORKSPACE-HUB.md`](WORKSPACE-HUB.md)**: the design of my local workspace hub: a fully offline semantic index and knowledge graph (search by meaning, plus a map of how the pieces connect) over an entire multi-project workspace, exposed to agents over MCP, so any session can retrieve the right context from any project without anything leaving the machine.
 - **[`CODE-GRAPH.md`](CODE-GRAPH.md)**: the code graph: a local index of every symbol and call relationship in a repo, exposed to the agent over MCP, with the two rules that make it load-bearing (impact analysis before editing any symbol, change detection before committing) and the freshness discipline that keeps a derived artifact from becoming a well-organized lie.
 - **[`MCP-LOADOUT.md`](MCP-LOADOUT.md)**: the Model Context Protocol servers I run, what each is for, and the rule that governs all of them: prefer the canonical source over the model's memory.
-- **[`QUALITY-GAUGE.md`](QUALITY-GAUGE.md)**: how to know whether agent-built software is any good instead of arguing about it. Five cheap measurements (duplication, static security, mutation, coverage, complexity), what each criticism actually claims, and the real numbers they returned on a shipping production codebase, including the one that came back badly and the rule that fell out of it.
-- **[`codex/`](codex/README.md)**: running the same harness on Codex (OpenAI's coding CLI) instead of Claude Code. The MCP loadout translated to Codex's TOML config, the principles as `AGENTS.md`, and an honest table of what ports and what does not, because the thinking is runtime-agnostic and the packaging is not.
+- **[`QUALITY-GAUGE.md`](QUALITY-GAUGE.md)**: how to know whether agent-built software is any good instead of arguing about it. Five cheap artifact measurements (duplication, static security, mutation, coverage, complexity), plus an optional longitudinal outcome-integrity gauge that keeps maturity floors separate from controlled experiment caps.
+- **[`codex/`](codex/README.md)**: running the same harness on Codex (OpenAI's coding CLI) instead of Claude Code. The MCP loadout translated to Codex's TOML config, a real [`AGENTS.md`](templates/AGENTS.md) bootstrap, and an honest table of what ports and what does not, because the thinking is runtime-agnostic and the packaging is not.
 
 ---
 
@@ -147,10 +150,11 @@ The products are private and proprietary. The harness that builds them is this r
 
 The harness is intentionally small and copy-paste friendly:
 
-1. Drop `templates/CLAUDE.md` at your project root and fill in the real decisions and current state.
+1. Drop `templates/CLAUDE.md` at your project root for Claude Code, or `templates/AGENTS.md` for Codex, and fill in the real decisions and current state.
 2. Add the `memory-bank` (decisions, active-context, progress) and make updating it a habit, not an afterthought.
-3. Adopt `AUTONOMOUS_LOOP.md` when a task is bigger than one context window.
-4. Read `PRINCIPLES.md` and `PATTERNS.md`, then start banking your own. The principles that matter most are the ones you earn.
+3. If the project has a prospective evidence collector, point the bootstrap at its project-local policy. Start eligible units before outcome-bearing work, keep ordinary collection open after its maturity floor, and preserve each controlled experiment's own fixed cap.
+4. Adopt `AUTONOMOUS_LOOP.md` when a task is bigger than one context window.
+5. Read `PRINCIPLES.md` and `PATTERNS.md`, then start banking your own. The principles that matter most are the ones you earn.
 
 MIT licensed. Take what is useful, make it yours.
 

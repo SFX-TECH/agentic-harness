@@ -2,7 +2,7 @@
 
 > How to know whether agent-built software is any good, instead of arguing about it.
 
-> **In plain terms:** Everything else in this harness is about *producing* software with coding agents. None of it tells you whether what came out is any good. This page is five cheap measurements that put a number on it, what each one answers, and the real numbers they returned on a shipping product. Old, boring, free tools. What is new is pointing them at agent-written code and publishing the result.
+> **In plain terms:** Everything else in this harness is about *producing* software with coding agents. None of it tells you whether what came out is any good. This page has five cheap artifact measurements plus a separate longitudinal integrity gauge, what each one answers, and the real numbers the artifact gauges returned on a shipping product. Old, boring, free tools. What is new is pointing them at agent-written code and publishing the result.
 
 ---
 
@@ -16,7 +16,7 @@ You can just measure it.
 
 Reviewers are useful and you should have them. But reviewers cost tokens, generate false positives (the best published study of multi-agent code review found roughly a 50% false-positive rate), and produce judgments you then have to judge. A duplication percentage is not an opinion. Neither is a mutation score. Numbers can be tracked over time, compared against public baselines, and handed to a skeptic.
 
-Everything below was run against a production codebase: a Windows repair app, roughly 900 files, 11,078 tests, 147 repair modules, weekly releases, real users. The numbers are the ones it actually returned, including the one that came back badly.
+The five artifact gauges below were run against a production codebase: a Windows repair app, roughly 900 files, 11,078 tests, 147 repair modules, weekly releases, real users. The numbers are the ones it actually returned, including the one that came back badly. The sixth gauge is a portable operating contract for measuring the harness over time; it is deliberately separate from those point-in-time code measurements.
 
 ---
 
@@ -107,6 +107,25 @@ The useful conclusion is not "refactor these." It is that complexity ranking han
 
 ---
 
+## 6. Longitudinal outcome integrity: "does the gauge keep telling the truth?"
+
+> **In plain terms:** A code scan describes an artifact at one point in time. A prospective ledger describes how real work behaves over time, including failures, rework, drift, and missing evidence. It is useful only if collection rules cannot change after the outcome is known.
+
+This is an optional harness gauge, not a sixth code-quality score. When a project enables it, register the exact repository root and start one content-free unit for each qualifying real code task before implementation or outcome-bearing exploration. Record the real verification sequence, retain failed checks after later passes, and finish every started unit truthfully. Never backfill, pad, favor clean work, or retain task content merely to increase coverage.
+
+Track controlled, privacy-safe fields that make drift visible:
+
+- started, finalized, pending, abandoned, and inconclusive units;
+- verified outcomes, retained verification failures, rework, and human intervention;
+- linkage and telemetry coverage, with missing values reported as missing;
+- project, client, configuration, harness, risk-tier, and time-window strata.
+
+Give the always-on ledger a **maturity floor**, then leave collection open after that floor is met. Report `floor met` separately from `collection open`; neither means that the system, model, or agent is suitable. A controlled experiment is a different population with a preregistered assignment method and fixed sample cap. Its denominator must not be extended with ordinary longitudinal work.
+
+The ledger can expose trends and generate better questions. By itself it cannot establish causality, prove model suitability, price actual billing, or authorize routing and deployment changes. Those claims need a separately consented and controlled evaluation.
+
+---
+
 ## What this pillar is not
 
 **Not a substitute for a human security review.** Scanners find known patterns. A person doing a threat model finds the thing nobody wrote a rule for. If your software runs with privilege, touches user data, or handles money, buy one human review pass before a trust milestone. Every gauge here raises the floor. None raises the ceiling.
@@ -128,6 +147,7 @@ Sequenced by value per minute of runtime:
 | Coverage | one test run | inside the existing test gate, reported not enforced |
 | Complexity | seconds | a weekly report, used to route human attention |
 | Mutation | minutes to hours | tag time, scoped to changed security-critical modules only |
+| Longitudinal outcome integrity | small metadata records at task and verification boundaries | continuous once explicitly configured; maturity floor reported separately from open collection |
 
 The rule governing all of them, and it is [Principle 3](PRINCIPLES.md) applied to quality: **a check that runs beats a habit that does not.** Anything depending on a person remembering to invoke it will drift, and you will find out at the worst moment. Put each gauge inside something that already runs.
 

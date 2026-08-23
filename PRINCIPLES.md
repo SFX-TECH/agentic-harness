@@ -38,6 +38,9 @@ A reviewer, human or model, hands you a judgment you then have to judge. A measu
 ## 12. Instruction files are attack surface on yourself
 The files that teach an agent how to work (skills, agent definitions, standing prompts) carry defects exactly like code, with one difference: nothing executes them, so nothing fails loudly. A defect can live at three mutually reinforcing layers: the instruction that mandates it, the code that faithfully implements it, and a test that locks it in as intended behavior. Fix only the code and the instruction teaches the bug straight back, so when closing a defect class, sweep all three layers in the same change. And provenance-check any imported instruction pack against the repo it sits in: I found ten instruction files from a different product living in a live agent path for months, teaching the exact opposite of the project's two load-bearing safety rules, and no agent ever questioned them, because agents read instructions as truth rather than reviewing them as claims.
 
+## 13. A maturity floor is not a stopping rule
+A longitudinal evidence ledger and a controlled experiment answer different questions. The ledger stays open after its initial maturity threshold so normal work continues to reveal project, configuration, harness, and time drift. An experiment stops at its preregistered sample cap so an outcome cannot quietly change its denominator. Keep the populations, lifecycle commands, and status labels separate: `floor met, collection open` for observation; `fixed sample reached, collection closed` for an experiment. Reusing one counter for both turns a useful gauge into a selection-bias machine.
+
 ---
 
 These are abstracted from real production work and contain no client data or application internals. The principle is the asset; the project that taught it stays private.

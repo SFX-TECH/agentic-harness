@@ -23,6 +23,13 @@ Break a large build into numbered phases, each with explicit exit criteria writt
 ## Evaluation harnesses and claim-proving
 For anything with a quality bar (a classifier, a router, a chat agent), build a runnable eval harness that grades real output against a ground truth you compute independently, and run it continuously. One such harness took an answer-quality pass rate from the low sixties to the high nineties (self-measured) by turning "it seems better" into a number that either went up or did not. A claim-prover step re-checks that every promise the product makes is still backed by a passing test, and refuses to ship one that is not.
 
+## Prospective longitudinal evidence
+When a project opts into outcome collection, register its exact repository root and classify each real code task before implementation or outcome-bearing exploration. For every eligible task, start one content-free work unit, record real verification events as they occur (including failures), and finish the same unit with its truthful outcome. Do not backfill old work, split one task into favorable units, drop failures, or retain prompts, source, paths, commands, tool output, secrets, or free-form notes merely to make the ledger richer.
+
+Treat the initial evidence target as a **maturity floor**, not a ceiling. After the floor is met, keep ordinary collection open so the gauge can expose drift across projects, configurations, harness versions, risk tiers, and time. Report both facts directly: `floor met` and `longitudinal collection open`. Missing linkage or telemetry remains missing rather than becoming zero.
+
+Keep controlled cohorts separate. A preregistered experiment owns its assignment policy, lifecycle entrypoint, denominator, and fixed stopping rule. Ordinary longitudinal work cannot fill, extend, or replace an experiment slot. If experimental units also appear in the overall longitudinal ledger, label and exclude them from ordinary-cohort comparisons rather than silently merging denominators. This separation preserves an honest always-on gauge without weakening a fixed comparison.
+
 ## PII-safe verification
 To verify a live system that holds private data, run redacted scripts that emit only counts, statuses, and structure. The agent confirms the system is wired correctly without ever seeing a name, an amount, or a balance. Verification and privacy are not in tension when the harness is built this way.
 

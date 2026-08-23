@@ -12,7 +12,7 @@
     {
       "name": "agentic-harness",
       "source": "./plugins/agentic-harness",
-      "description": "Durable context (a memory bank), one-orchestrator sub-agent discipline, verify-against-canonical-source gates, and a clean key-free MCP loadout. Installs sub-agents, skills, an MCP set, and a /harness-init scaffolder into your Claude Code. Fully customizable."
+      "description": "Durable context (a memory bank), one-orchestrator sub-agent discipline, verify-against-canonical-source gates, optional prospective evidence, and a clean key-free MCP loadout. Installs sub-agents, skills, an MCP set, and a /harness-init scaffolder into your Claude Code. Fully customizable."
     }
   ]
 }

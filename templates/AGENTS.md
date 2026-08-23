@@ -1,15 +1,11 @@
-# <Project>: session bootstrap
+# <Project>: Codex session bootstrap
 
-This file is auto-loaded by every coding-agent session in this workspace. It inlines the memory bank so every session starts with current decisions and state, no matter how long since the last one. Keep it short. Long-form context lives in the files this points at.
+This file is loaded by Codex sessions in this workspace. Keep it short. Long-form context lives in the memory-bank files below. Before non-trivial work, read each file that exists so a new session starts from current decisions and state.
 
-## Locked decisions (the spine)
-@.memory-bank/decisions.md
-
-## Current state
-@.memory-bank/active-context.md
-
-## Progress log
-@.memory-bank/progress.md
+## Durable context
+- `.memory-bank/decisions.md`: append-only architectural decisions and rationale
+- `.memory-bank/active-context.md`: current state and immediate constraints
+- `.memory-bank/progress.md`: chronological shipped-work log
 
 ---
 
@@ -23,7 +19,7 @@ This file is auto-loaded by every coding-agent session in this workspace. It inl
 ## Behavioral defaults
 - Verify against canonical source before relying on it: read the live schema, the installed SDK types, the real API state. Behavior beats docs.
 - Every new tenant table ships its isolation test in the same commit. No exceptions.
-- Every consequential decision is banked in decisions.md, dated, with rationale, before the code that implements it.
+- Every consequential decision is banked in `decisions.md`, dated, with rationale, before the code that implements it.
 - No invented metrics. Tag self-measured numbers as self-measured.
 - If a prospective evidence contract is configured, assess each new version-controlled code task before outcome-bearing exploration. Start eligible units prospectively, retain real verification failures, and finish every unit truthfully. A maturity floor is not a collection ceiling; a controlled experiment keeps its own preregistered sample cap and lifecycle.
 - <house-style rules, for example: no em-dashes in user-facing copy>
@@ -32,7 +28,7 @@ This file is auto-loaded by every coding-agent session in this workspace. It inl
 - Use the code-intelligence MCP to check blast radius before editing a symbol.
 - Use the database MCP to read the schema before writing SQL.
 - Use the docs MCP for current SDK and framework behavior instead of recalling it.
-- Invoke the code-reviewer sub-agent before any merge.
+- Invoke a code-reviewer sub-agent before any merge.
 
 ## Anti-patterns to avoid
 - Reaching for the model's memory when an MCP can give current truth.

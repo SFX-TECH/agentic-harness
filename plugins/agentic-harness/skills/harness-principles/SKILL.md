@@ -1,6 +1,6 @@
 ---
 name: harness-principles
-description: The operational principles of the agentic harness, for deciding how to approach a non-trivial change. Verifying against canonical source, mechanized over remembered safety, architectural pre-work, one-orchestrator sub-agent discipline, and discipline as the pace enabler.
+description: The operational principles of the agentic harness, for deciding how to approach a non-trivial change. Verifying against canonical source, mechanized over remembered safety, architectural pre-work, one-orchestrator sub-agent discipline, longitudinal evidence integrity, and discipline as the pace enabler.
 ---
 
 These are the load-bearing principles of the harness. Apply them when planning or executing a non-trivial change.
@@ -14,5 +14,7 @@ These are the load-bearing principles of the harness. Apply them when planning o
 4. **One orchestrator, sequential sub-agents.** Decompose the work, delegate bounded pieces with tight specs, integrate the results, and own the judgment calls yourself. A swarm that all writes at once is a merge conflict and a rate-limit wall waiting to happen. When a sub-agent is interrupted, verify its work against the real file state and complete the remainder; never trust its report alone.
 
 5. **Discipline is the pace enabler, not its enemy.** The intuition that process slows shipping is wrong at real complexity. The audits and gates catch problems at the cheapest moment, which is exactly what lets the work move fast. Bank every consequential decision, dated, with its rationale, before the code that implements it.
+
+6. **A maturity floor is not a stopping rule.** If a project has an optional prospective evidence collector, keep ordinary longitudinal collection open after its initial maturity floor. A controlled experiment is different: it retains its preregistered population, lifecycle, denominator, and fixed sample cap. Never fill or extend an experiment with ordinary observational work, and never silently treat a reached floor as a closed gauge.
 
 When the work outgrows a single context window, treat the memory bank as the project's durable brain: decisions.md (append-only, the architectural spine), active-context.md (this week only, replaced not appended), progress.md (chronological shipped log).

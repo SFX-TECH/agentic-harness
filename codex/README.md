@@ -8,7 +8,7 @@ that can make the setup look broken.
 
 ## What actually failed
 
-At reproduction time, the live `C:\Users\jesse\.codex\config.toml` already
+At reproduction time, the live `<home>\.codex\config.toml` already
 contained the four target servers, along with ten other stdio servers. Its
 target entries used `cmd /c npx`; the filesystem entry allowed two absolute
 SimpleFix paths; no target entry set a startup timeout. The file also set:
@@ -53,7 +53,7 @@ Three different failures appeared during reproduction:
 
    ```text
    Access denied - path outside allowed directories:
-   C:\Users\jesse\.codex\AGENTS.md not in D:\agentic-harness
+   <home>\.codex\AGENTS.md not in <repo-root>
    ```
 
    Adding the exact outside directory as a second server argument made the
@@ -80,9 +80,23 @@ One environment trap is worth separating from the adapter. A CLI process
 started inside a restricted Codex desktop command sandbox used
 `C:\Users\CodexSandboxOffline\.codex` as `CODEX_HOME`, so `codex mcp list`
 reported `No MCP servers configured yet.` The same command from the normal
-user environment loaded `C:\Users\jesse\.codex\config.toml` and reported 14
+user environment loaded `<home>\.codex\config.toml` and reported 14
 enabled stdio servers. Run configuration diagnostics from a normal terminal,
 or inspect `codex doctor` and confirm the `config.toml` path it reports.
+
+## Project bootstrap
+
+Copy [`../templates/AGENTS.md`](../templates/AGENTS.md) to the root of a Codex
+project and fill in its real stack, memory-bank locations, tools, and locked
+constraints. Unlike Claude's `@file` imports, the template tells Codex to read
+the three Markdown memory-bank files explicitly before non-trivial work.
+
+The bootstrap also has an optional prospective-evidence slot. Leave it as
+`none` when no collector exists. When a project configures one, point to its
+project-local policy or runbook: start eligible work before outcome-bearing
+exploration, retain failed verification events, and finish it truthfully. An
+ordinary longitudinal ledger remains open after its maturity floor; a
+controlled experiment retains its own preregistered sample cap and lifecycle.
 
 ## Working MCP configuration
 
@@ -168,7 +182,7 @@ Tool called:
 filesystem.read_text_file
 ```
 
-The first call, with only `D:\agentic-harness` allowed, produced the exact
+The first call, with only `<repo-root>` allowed, produced the exact
 access-denied error shown above. The final proof allowed
 `C:\Users\Public\Documents` as a second root. Codex then read
 `C:\Users\Public\Documents\desktop.ini` from outside the working directory and
@@ -220,9 +234,9 @@ where `approvals_reviewer = "auto_review"` was already enabled.
 
 | Harness piece | Verified Codex 0.143.0 and 0.146.0 status | Evidence and limit |
 |---|---|---|
-| Principles and patterns | Ports | A global `AGENTS.md` instruction caused the proof session to read the required prompt architecture file before delegating. Plain instruction text is portable. |
+| Principles and patterns | Ports | The project [`AGENTS.md`](../templates/AGENTS.md) template carries the runtime-neutral bootstrap. A global `AGENTS.md` instruction also caused the proof session to read the required prompt architecture file before delegating. Plain instruction text is portable. |
 | MCP tool loadout | Ports | All four servers handled real calls. Codex uses `config.toml`, explicit filesystem roots, and MCP tool approval policy. |
-| Memory bank files | Ports as data | The Markdown files need no runtime conversion. Automatic creation and startup surfacing are separate capabilities. |
+| Memory bank files | Ports as data | The Markdown files need no runtime conversion, and the `AGENTS.md` template tells Codex to read them. Automatic creation and startup surfacing are separate capabilities. |
 | Sub-agent execution | Ports | `codex features list` reported `multi_agent` stable and enabled. A real `spawn_agent` call read `PRINCIPLES.md` and returned `Verify against canonical source`. The Claude-specific named files in `agents/*.md` were not imported or tested. |
 | Skills | Ports with path and content review | Codex attempted to load a user `SKILL.md` during every proof session, and the current manual documents `.agents/skills`. The existing `harness-principles` content is portable. `harness-init` is not drop-in because it uses `CLAUDE_SKILL_DIR`, `CLAUDE_PROJECT_DIR`, `$ARGUMENTS`, `CLAUDE.md`, and `.claude/memory-bank`. |
 | Hooks | Codex has an equivalent, but this hook is not ported | `codex features list` reported hooks stable, and the CLI exposes hook trust handling. The repository's Bash `SessionStart` hook uses Claude-specific variables and was not executed by Codex in this verification. |
