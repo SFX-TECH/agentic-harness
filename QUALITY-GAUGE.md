@@ -16,7 +16,7 @@ You can just measure it.
 
 Reviewers are useful and you should have them. But reviewers cost tokens, generate false positives (the best published study of multi-agent code review found roughly a 50% false-positive rate), and produce judgments you then have to judge. A duplication percentage is not an opinion. Neither is a mutation score. Numbers can be tracked over time, compared against public baselines, and handed to a skeptic.
 
-The five artifact gauges below were run against a production codebase: a Windows repair app, roughly 900 files, 11,078 tests, 147 repair modules, weekly releases, real users. The numbers are the ones it actually returned, including the one that came back badly. The sixth gauge is a portable operating contract for measuring the harness over time; it is deliberately separate from those point-in-time code measurements.
+The five artifact gauges below were run against a production codebase: a shipping Windows repair app, roughly a thousand files, thousands of automated tests, a large multi-tier repair engine, weekly releases, real users. The numbers are the ones it actually returned, including the one that came back badly. The sixth gauge is a portable operating contract for measuring the harness over time; it is deliberately separate from those point-in-time code measurements.
 
 ---
 
@@ -46,7 +46,7 @@ Roughly one eighth of the published ecosystem average, and that average includes
 
 **The real result was four.** Four uses of `tempfile.mktemp()`, a function that hands back a predictable filename *without creating the file*, leaving a window where an attacker pre-creates that path as a symbolic link and redirects the write somewhere privileged. The worst instance sat in the undo engine, feeding an elevated PowerShell redirect: a privileged write to an attacker-choosable path, inside the feature the product's entire safety story rests on.
 
-An afternoon of read-only scanning found a privilege-escalation-class bug that fourteen review agents and eleven thousand tests had not.
+An afternoon of read-only scanning found a privilege-escalation-class bug that fourteen review agents and thousands of passing tests had not.
 
 **The transferable part is the triage, not the tool.** Raw scanner output is mostly noise, and a harness that says "run bandit" has not helped you. Sort by severity *and* confidence. Classify your accepted patterns once, with a written reason, so they stop generating debate: a repair tool runs subprocess on purpose, and those warnings are expected forever. Then hunt specifically for the classes that matter in your domain. Publish the triaged number, never the raw one.
 
@@ -101,7 +101,7 @@ Coverage is the weakest of the five as a quality signal and still worth having, 
 
 **What it returned.** The top functions scored 249, 209, and 105.
 
-**How to read that honestly.** A dispatcher over 147 repair modules is going to branch a lot, and high complexity there is not automatically a defect. But 249 independent paths means full-path testing is impossible and no human holds all of it in their head.
+**How to read that honestly.** A dispatcher over the full repair catalog is going to branch a lot, and high complexity there is not automatically a defect. But 249 independent paths means full-path testing is impossible and no human holds all of it in their head.
 
 The useful conclusion is not "refactor these." It is that complexity ranking hands you a **prioritized map of where your understanding debt actually lives**, which is precisely where to point a human reviewer and precisely where to be most suspicious of a confident agent.
 

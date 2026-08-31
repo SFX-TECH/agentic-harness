@@ -13,11 +13,24 @@ I run many projects at once. Context that lives in one project's docs is invisib
 - **A knowledge graph** over the workspace for relationship queries.
 
 ## How it is built
-- **Embeddings:** a local embedding model indexes the workspace into tens of thousands of chunks, text and images.
+- **Embeddings:** a local embedding model indexes the workspace, currently 23 project roots, into tens of thousands of chunks, text and images.
 - **Chat:** a local instruction model serves the "ask" answers, through a local server's OpenAI-compatible API.
 - **Two interfaces, one index:** the hub is exposed as an HTTP API for apps and as an MCP server for coding agents at the same time, so the same index serves a dashboard and a Claude Code session.
 - **Freshness:** the index refreshes on a schedule, so answers track the working tree.
 - **Local only:** the embedding model, the chat model, and the index all run on the build machine. No project data is sent anywhere.
+
+```mermaid
+flowchart TD
+    subgraph LOCAL["On the build machine, nothing leaves it"]
+      WS["Multi-project workspace<br/>23 project roots, text and images"] --> EMB["Local embedding model"]
+      EMB --> IDX[("One local index<br/>vectors plus knowledge graph")]
+      LLM["Local chat model<br/>grounded ask, cites sources"] --> IDX
+      IDX --> MCP["MCP server"]
+      IDX --> API["HTTP API"]
+    end
+    MCP --> AGENT["Coding-agent sessions<br/>cross-project retrieval"]
+    API --> APP["Dashboard and apps"]
+```
 
 ## Why it matters for the harness
 Durable context (see `CONTEXT-AS-CODE.md`) keeps one project's brain alive across sessions. The hub does the same across the whole workspace: it is the retrieval layer that lets any agent session start from everything I have built, not just the project it happens to be in, while keeping every byte of it local. It is the difference between an agent that knows this repo and an agent that knows my entire body of work.
