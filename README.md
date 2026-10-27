@@ -134,7 +134,7 @@ The full list lives in [`PRINCIPLES.md`](PRINCIPLES.md). The load-bearing ones:
 
 This is not a thought experiment. The harness is how I build and operate, solo:
 
-- **SimpleFixAI**: a shipping, fully offline, patent-pending Windows repair app. Thousands of automated tests, a multi-tier repair engine, snapshot-and-undo on every change. [Showcase »](https://github.com/SFX-TECH/simplefixai-showcase)
+- **SimpleFixAI**: a shipping, patent-pending Windows PC repair assistant. Rules in code choose the repairs and their order, a model can never write or run commands, every repair gets a safety snapshot first with tiered undo, and more than 21,000 automated tests pass in the nightly run. [Showcase »](https://github.com/SFX-TECH/simplefixai-showcase)
 - **CoachFile**: a live private client-memory SaaS, with AI extraction that cites its sources and never invents. [Showcase »](https://github.com/SFX-TECH/coachfile-showcase)
 - **SFX Lead Intelligence Command Center**: a fully local LLM hub and dashboard; answer quality lifted from 61.5 percent to 99.0 percent (self-measured) by a ground-truth evaluation harness. [Showcase »](https://github.com/SFX-TECH/sfx-lead-intelligence)
 - **Local Transcriber**: a local-first, on-device AI desktop tool that turns any audio or video into text on your own machine. [Local Transcriber »](https://github.com/SFX-TECH/local-transcriber)
